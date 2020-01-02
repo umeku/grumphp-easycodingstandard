@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace NLubisch\GrumPHP\Task;
 
 use GrumPHP\Runner\TaskResult;
+use GrumPHP\Runner\TaskResultInterface;
 use GrumPHP\Task\AbstractExternalTask;
 use GrumPHP\Task\Context\ContextInterface;
 use GrumPHP\Task\Context\GitPreCommitContext;
@@ -27,7 +28,7 @@ class Ecs extends AbstractExternalTask
             'fix' => false,
         ]);
 
-        $resolver->addAllowedTypes('config', ['string']);
+        $resolver->addAllowedTypes('config', ['null', 'string']);
         $resolver->addAllowedTypes('whitelist_patterns', ['array']);
         $resolver->addAllowedTypes('fix', ['bool']);
 
@@ -39,7 +40,7 @@ class Ecs extends AbstractExternalTask
         return $context instanceof GitPreCommitContext || $context instanceof RunContext;
     }
 
-    public function run(ContextInterface $context)
+    public function run(ContextInterface $context): TaskResultInterface
     {
         $config = $this->getConfiguration();
         $whitelistPatterns = $config['whitelist_patterns'];
